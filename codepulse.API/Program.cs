@@ -2,12 +2,15 @@ using codepulse.API.Data;
 using codepulse.API.Repositories.Implementation;
 using codepulse.API.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -19,6 +22,7 @@ builder.Services.AddDbContext<dbContext>(options =>
 );
 builder.Services.AddScoped<ICategory, CategoryRepo>();
 builder.Services.AddScoped<IBlogPostRepo, BlogPostRepo>();
+builder.Services.AddScoped<IImageRepo,ImageRope>();
 
 var app = builder.Build();
 
@@ -39,6 +43,11 @@ app.UseCors(options =>
 
 });
 app.UseAuthorization();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"Images")),
+    RequestPath= "/Images"
+});
 
 app.MapControllers();
 

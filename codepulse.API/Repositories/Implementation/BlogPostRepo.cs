@@ -40,14 +40,35 @@ namespace codepulse.API.Repositories.Implementation
             return await dbContext.BlogPosts.Include(x => x.categories).FirstOrDefaultAsync(x => x.Title == title);
         }
 
-        public async Task<BlogPost> EditBlogPost(BlogPost post)
+        public async Task<BlogPost?> EditBlogPost(BlogPost post)
         {
           var cat = await dbContext.BlogPosts.Include(x=>x.categories). FirstOrDefaultAsync(x=>x.Id==post.Id);   
             if(cat!=null)
             {
+                //update blogpost here
                 dbContext.Entry(cat).CurrentValues.SetValues(post);
+                // Update categories her
+                cat.categories = post.categories;
+                // Save changes in db
                 await dbContext.SaveChangesAsync();
                 return post;    
+            }
+            return null;
+        }
+
+        public async Task<BlogPost?> DeletBlogPostById(Guid id)
+        {
+          var cat = await dbContext.BlogPosts.FirstOrDefaultAsync(x=>x.Id==id);
+            if(cat!=null)
+            {
+
+                dbContext.BlogPosts.Remove(cat);
+                
+                    //cat.categories = cat.categories;
+
+                await dbContext.SaveChangesAsync();
+                return cat;
+
             }
             return null;
         }

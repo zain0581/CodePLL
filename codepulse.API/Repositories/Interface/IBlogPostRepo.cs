@@ -11,6 +11,8 @@ namespace codepulse.API.Repositories.Interface
         Task <BlogPost?> GetById(Guid id);
         Task <BlogPost?> GetByTitle( string title);
 
-        Task <BlogPost> EditBlogPost(BlogPost post);    
+        Task <BlogPost?> EditBlogPost(BlogPost post);    
+
+        Task <BlogPost?> DeletBlogPostById(Guid id);
     }
 }

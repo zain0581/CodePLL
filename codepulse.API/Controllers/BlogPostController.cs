@@ -149,11 +149,11 @@ namespace codepulse.API.Controllers
         }
 
 
-        [HttpGet ("Title")]
-        public async Task <IActionResult> GetBlogByTitle(string Title)
+        [HttpGet("Title")]
+        public async Task<IActionResult> GetBlogByTitle(string Title)
         {
 
-           var title = await blogPost.GetByTitle (Title);
+            var title = await blogPost.GetByTitle(Title);
             if (title == null)
             {
                 return BadRequest();
@@ -181,20 +181,116 @@ namespace codepulse.API.Controllers
         }
 
 
-        //[HttpPut]
-        //[Route("{id:Guid}")]
-        //public async Task<IActionResult> EditBlogPost([FromRoute] Guid id,  Request)
-        //{
-        //   blogPost.EditBlogPost()
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> EditBlogPost([FromRoute] Guid id, UpdateBlogPostRequestDto request)
+        {
+            //convert dto to Domain Nodel 
+            var blogpost = new BlogPost
+            {
+                Id = id,
+                Author = request.Author,
+                Content = request.Content,
+                Title = request.Title,
+                PublishedDate = request.PublishedDate,
+                FeatureImageUrl = request.FeatureImageUrl,
+                ShortDescription = request.ShortDescription,
+                IsVisible = request.IsVisible,
+                UrlHandle = request.UrlHandle,
+                categories = new List<Category>()
+            };
 
-        //}
+            foreach (var cat in request.Categories)
+            {
+                var existing = await category.GetById(cat);
+                if (existing != null)
+                {
+                    blogpost.categories.Add(existing);
+                }
+            }
+
+            // calling the repository 
+            var title = await blogPost.EditBlogPost(blogpost);
+            if (title == null)
+            {
+                return NotFound();
+            }
+
+            var response = new BlogPostDto
+            {
+                Id = title.Id,
+                Author = title.Author,
+                Content = title.Content,
+                Title = title.Title,
+                PublishedDate = title.PublishedDate,
+                FeatureImageUrl = title.FeatureImageUrl,
+                ShortDescription = title.ShortDescription,
+                IsVisible = title.IsVisible,
+                UrlHandle = title.UrlHandle,
+                categories = title.categories.Select(x => new CategoryDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+                }).ToList()
+            };
+
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task <IActionResult>DeleteBlogpost([FromRoute] Guid id)
+        {
+            var cat = await blogPost.DeletBlogPostById(id);
+            if (cat == null)
+            {
+                return BadRequest();
+            }
+            var response = new BlogPostDto
+            {
+                Title = cat.Title,
+                PublishedDate = cat.PublishedDate,
+                FeatureImageUrl = cat.FeatureImageUrl,
+                ShortDescription = cat.ShortDescription,
+                IsVisible = cat.IsVisible,
+                UrlHandle = cat.UrlHandle,
+                Author = cat.Author,
+                Content = cat.Content,
+                //categories = cat.categories.Select(x => new CategoryDTO
+                //{
+                //    Id = x.Id,
+                //    Name = x.Name,
+                //    UrlHandle = x.UrlHandle
+                //}).ToList()
+
+            };
+            return( Ok(response));  
+        }
 
 
 
 
 
     }
-        
-
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
