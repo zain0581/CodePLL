@@ -134,7 +134,7 @@ namespace codepulse.API.Controllers
         }
 
         [HttpDelete]
-        
+        [Route("{id:Guid}")]
         public async Task<IActionResult> DeletCetgoryById([FromRoute] Guid id)
         {
             var category =await categoryrepo.DeleteCategoryById(id);
