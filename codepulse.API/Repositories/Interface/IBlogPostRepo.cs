@@ -9,7 +9,9 @@ namespace codepulse.API.Repositories.Interface
         Task<IEnumerable<BlogPost>> GetAllAsync();
 
         Task <BlogPost?> GetById(Guid id);
+
         Task <BlogPost?> GetByTitle( string title);
+        Task<BlogPost?> GetByUrlHandle(string UrlHandle);
 
         Task <BlogPost?> EditBlogPost(BlogPost post);    
 

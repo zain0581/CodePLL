@@ -181,6 +181,40 @@ namespace codepulse.API.Controllers
         }
 
 
+        [HttpGet]
+        [Route("{UrlHandle}")]
+        public async Task<IActionResult> GetBlogByUrl([FromRoute] string UrlHandle)
+        {
+           var blogpost =  await blogPost.GetByUrlHandle(UrlHandle);
+            if (blogpost == null)
+            {
+                return BadRequest();
+            }
+            var resposne = new BlogPostDto
+            {
+                Id = blogpost.Id,
+                Author = blogpost.Author,
+                Content = blogpost.Content,
+                Title = blogpost.Title,
+                PublishedDate = blogpost.PublishedDate,
+                FeatureImageUrl = blogpost.FeatureImageUrl,
+                ShortDescription = blogpost.ShortDescription,
+                IsVisible = blogpost.IsVisible,
+                UrlHandle = blogpost.UrlHandle,
+                categories = blogpost.categories.Select(x => new CategoryDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle,
+
+                }).ToList()
+
+            };
+            return Ok(resposne);
+
+        }
+
+
         [HttpPut]
         [Route("{id:Guid}")]
         public async Task<IActionResult> EditBlogPost([FromRoute] Guid id, UpdateBlogPostRequestDto request)
