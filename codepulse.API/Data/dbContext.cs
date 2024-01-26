@@ -15,5 +15,7 @@ namespace codepulse.API.Data
 
         public DbSet<BlogImage> BlogImages { get; set; }
 
+
+
     }
 }

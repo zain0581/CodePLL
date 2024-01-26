@@ -1,6 +1,7 @@
 using codepulse.API.Data;
 using codepulse.API.Repositories.Implementation;
 using codepulse.API.Repositories.Interface;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
@@ -14,15 +15,29 @@ builder.Services.AddHttpContextAccessor();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<dbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("connectionToDB"));
-}
+});
 
-);
+//AuthDb
+builder.Services.AddDbContext<AuthDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("connectionToDB"));
+});
+
+
+
 builder.Services.AddScoped<ICategory, CategoryRepo>();
 builder.Services.AddScoped<IBlogPostRepo, BlogPostRepo>();
 builder.Services.AddScoped<IImageRepo,ImageRope>();
+
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Zain")
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
