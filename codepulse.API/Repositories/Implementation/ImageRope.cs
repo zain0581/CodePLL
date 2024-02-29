@@ -51,6 +51,11 @@ namespace codepulse.API.Repositories.Implementation
         {
            return await _dbContext.BlogImages.FirstOrDefaultAsync(x=>x.Id==id);
         }
+
+        public async Task<BlogImage?> GetByTitle(string Title)
+        {
+           return await _dbContext.BlogImages.FirstOrDefaultAsync(x=>x.Title==Title);   
+        }
     }
     
 }

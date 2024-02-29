@@ -6,7 +6,7 @@ namespace codepulse.API.Data
     public class dbContext : DbContext
 
     {
-        public dbContext(DbContextOptions options) : base(options)
+        public dbContext(DbContextOptions <dbContext> options) : base(options)
         {
         }
 

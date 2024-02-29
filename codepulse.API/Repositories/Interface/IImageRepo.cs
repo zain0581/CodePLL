@@ -9,6 +9,8 @@ namespace codepulse.API.Repositories.Interface
         Task<IEnumerable<BlogImage>> GetAllImages();
 
         Task<BlogImage?> GetById(Guid id);
+
+        Task<BlogImage?> GetByTitle(string Title);
         
     }
 }

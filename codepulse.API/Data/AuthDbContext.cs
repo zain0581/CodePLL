@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace codepulse.API.Data
 {
-    public class AuthDbContext : IdentityDbContext 
+    public class AuthDbContext : IdentityDbContext
 
     {
-        public AuthDbContext(DbContextOptions options) : base(options) 
-        { 
-        
+        public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
+        {
+
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -39,7 +39,7 @@ namespace codepulse.API.Data
                     NormalizedName = "Writer".ToUpper(),
                     ConcurrencyStamp = writerRoleId
 
-                    
+
                 }
             };
 
@@ -80,7 +80,7 @@ namespace codepulse.API.Data
 
 
 
-             
+
         }
 
     }

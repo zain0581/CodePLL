@@ -2,6 +2,7 @@
 using codepulse.API.Modells.DTO;
 using codepulse.API.Repositories.Implementation;
 using codepulse.API.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -82,6 +83,7 @@ namespace codepulse.API.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllBlogPosts()
         {
             var Blogpos = await blogPost.GetAllAsync();

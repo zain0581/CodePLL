@@ -131,6 +131,29 @@ namespace codepulse.API.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("{Title}")]
+        public async Task<IActionResult> GetImagebyTitle(string Title)
+        {
+            var img= await Imagerepo.GetByTitle(Title);
+            if (img == null)
+            {
+                return BadRequest();
+            }
+            var response = new BlogImageDto 
+            { 
+                Id = img.Id, 
+                FileExtension= img.FileExtension,
+                Url = img.Url,
+                FileNmae = img.FileNmae,
+                DateCreated= DateTime.Now,
+                Title = img.Title 
+            };
+            return Ok(response);
+
+
+        }
+
     }
 }
 
