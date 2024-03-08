@@ -1,4 +1,5 @@
 ﻿using codepulse.API.Modells.DTO;
+using codepulse.API.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,49 @@ namespace codepulse.API.Controllers
 
     {
         private readonly UserManager<IdentityUser> UserManager;
+        private readonly ITokenRepo Tokenrepo;
 
-        public AuthController(UserManager<IdentityUser> userManager)
+        public AuthController(UserManager<IdentityUser> userManager , ITokenRepo tokenrepo)
         {
             UserManager = userManager;
+            this.Tokenrepo = tokenrepo;
         }
+        //Password for admin user 
+        //Admin@123
+
+        [HttpPost]
+        [Route("login")]
+       public async Task<IActionResult> login([FromBody]LoginRequestDto request)
+
+       {
+            //Check Email
+            var identityuser = await UserManager.FindByEmailAsync(request.Email);
+
+            if (identityuser is not null)
+            {
+                // cHECK pASSSWORD
+               var cheackpassword = await UserManager.CheckPasswordAsync(identityuser,request.Password);
+
+
+                if(cheackpassword )
+                {
+                    var roles = await UserManager.GetRolesAsync(identityuser);
+
+                    //creat a tokken response
+                    var jwttoken = Tokenrepo.CreateJwtToken(identityuser,roles.ToList());
+                    var response = new LoginResponseDto()
+                    {
+                        Email = request.Email,
+                        Roles = roles.ToList(),
+                        Token = jwttoken
+                    };
+                    return Ok(response);
+                }
+            }
+            ModelState.AddModelError("", "Email or password incoorect");
+            return ValidationProblem(ModelState);
+
+       }
 
        
 

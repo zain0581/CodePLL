@@ -34,6 +34,8 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 builder.Services.AddScoped<ICategory, CategoryRepo>();
 builder.Services.AddScoped<IBlogPostRepo, BlogPostRepo>();
 builder.Services.AddScoped<IImageRepo,ImageRope>();
+builder.Services.AddScoped<ITokenRepo, TokenRepo>();    
+
 
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddRoles<IdentityRole>()

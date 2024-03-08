@@ -83,7 +83,7 @@ namespace codepulse.API.Controllers
 
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetAllBlogPosts()
         {
             var Blogpos = await blogPost.GetAllAsync();
