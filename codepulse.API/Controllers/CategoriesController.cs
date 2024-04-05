@@ -3,6 +3,7 @@ using codepulse.API.Modells.Domain;
 using codepulse.API.Modells.DTO;
 using codepulse.API.Repositories.Implementation;
 using codepulse.API.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +46,8 @@ namespace codepulse.API.Controllers
         }
 
         [HttpGet]
+    
+ 
         public async Task<IActionResult> GetAllCategories()
         {
             var cat = await categoryrepo.GetAllAsync();
